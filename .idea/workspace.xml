@@ -13,11 +13,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="268">
-              <caret line="621" column="48" selection-start-line="621" selection-start-column="48" selection-end-line="621" selection-end-column="48" />
+            <state relative-caret-position="127">
+              <caret line="586" column="39" selection-start-line="586" selection-start-column="39" selection-end-line="586" selection-end-column="39" />
               <folding>
                 <element signature="n#style#0;n#head#0;n#html#0;n#!!top" />
                 <element signature="n#div#0;n#body#0;n#html#0;n#!!top" />
@@ -30,18 +30,19 @@
                 <element signature="e#8840#8882#0" />
                 <element signature="e#9793#14723#0" />
                 <element signature="e#20489#22252#0" />
+                <element signature="e#22293#24246#0" />
                 <element signature="e#24290#29068#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="51">
-                <caret line="3" column="53" selection-start-line="3" selection-start-column="53" selection-end-line="3" selection-end-column="53" />
+              <first_editor relative-caret-position="85">
+                <caret line="5" column="14" lean-forward="true" selection-start-line="5" selection-start-column="14" selection-end-line="5" selection-end-column="14" />
               </first_editor>
               <second_editor />
             </state>
@@ -123,8 +124,8 @@
         <option value="$PROJECT_DIR$/scr/immigration by year.csv" />
         <option value="$PROJECT_DIR$/trial.html" />
         <option value="$PROJECT_DIR$/Project - 1.html" />
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/index.html" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -214,7 +215,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="242025000" />
+    <option name="totallyTimeSpent" value="242629000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="156" y="23" width="1230" height="877" extended-state="0" />
@@ -355,20 +356,10 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/trial.html" />
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="51">
-            <caret line="3" column="53" selection-start-line="3" selection-start-column="53" selection-end-line="3" selection-end-column="53" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="268">
-          <caret line="621" column="48" selection-start-line="621" selection-start-column="48" selection-end-line="621" selection-end-column="48" />
+        <state relative-caret-position="127">
+          <caret line="586" column="39" selection-start-line="586" selection-start-column="39" selection-end-line="586" selection-end-column="39" />
           <folding>
             <element signature="n#style#0;n#head#0;n#html#0;n#!!top" />
             <element signature="n#div#0;n#body#0;n#html#0;n#!!top" />
@@ -381,8 +372,19 @@
             <element signature="e#8840#8882#0" />
             <element signature="e#9793#14723#0" />
             <element signature="e#20489#22252#0" />
+            <element signature="e#22293#24246#0" />
             <element signature="e#24290#29068#0" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="85">
+            <caret line="5" column="14" lean-forward="true" selection-start-line="5" selection-start-column="14" selection-end-line="5" selection-end-column="14" />
+          </first_editor>
+          <second_editor />
         </state>
       </provider>
     </entry>
