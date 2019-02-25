@@ -869,6 +869,8 @@
                         countrySelect.disabled = false;
                     }
                     selectedCountries.splice(key,1);
+                    g.selectAll(".mouseMoveCircle" + country).remove();
+                    g.selectAll(".mouseMoveText" + country).remove();
                     break;
                 }
             }
@@ -878,6 +880,8 @@
                 .duration(1000)
                 .attr("stroke-dashoffset", path.node().getTotalLength())
                 .remove();
+
+
             countryList.remove(countryList.selectedIndex);
             updateChart(0);
         }
