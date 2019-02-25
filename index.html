@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Project 1 - The US Legal Immigration</title>
+    <script src="js/underscore.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <!--<link rel="stylesheet" href="/resources/demos/style.css">-->
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <style>
+        svg{
+            border: 1px solid black;
+            display: flex;
+            /*margin: fill;*/
+        }
+        .ui-slider {
+            margin-left: 65px;
+            margin-bottom: 12px;
+            height: 10px;
+            width: 600px;
+        }
+        .col-md-10{
+            float:left;
+            width: 70%;
+            height: 95%;
+            margin: 0px 0px 0px 3%;
+        }
+        .col-md-2{
+            margin: auto;
+        }
+
+        .minorLine {
+            /*stroke: #005689;*/
+            stroke-width: 1px;
+            fill: none;
+            opacity: .7;
+        }
+        .majorLine {
+            stroke: #1970fc;
+            stroke-width: 2px;
+            fill: none;
+        }
+
+        .labelMinor {
+            font-family: sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            fill: #005689;
+            text-anchor: end;
+        }
+        .labelMajor {
+            font-family: sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            fill: #d61d00;
+            text-anchor: start;
+        }
+        .area {
+            /*fill: #eaeaea;*/
+            opacity: 0.5;
+        }
+
+        .area--below {
+            fill: #de77ae;
+        }
+
+        .area--above {
+            fill: #7fbc41;
+        }
+
+        .circle {
+            fill: #c7254e;
+        }
+
+        .circle:hover{
+            fill: #afd9ee;
+        }
+
+        .baseLine {
+            stroke: black;
+            stroke-width: 1.5;
+            fill: none;
+        }
+
+        div.tooltip {
+            position: absolute;
+            text-align: center;
+            font: 12px sans-serif;
+            pointer-events: none;
+        }
+
+        .grid line{
+            stroke: lightgrey;
+            stroke-opacity: 0.7;
+            shape-rendering: optimizeSpeed;
+        }
+
+        #chart-area{
+            overflow-y: auto;
+            font-size: 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="well well-sm" >
+        <div class="text-center">
+            <h3> Project 1 - Legal US Immigration from 1989 to 2017</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-10">
+            <h4>Chart Area</h4>
+            <div id="slider-div">
+                <label>Year range: </label>
+                <input type="text" id="year-range" readonly style="border:0; font-weight:bold; margin: fill">
+            </div>
+            <div id="slider"></div>
+            <div id="chart-area" ></div>
+        </div>
+        <div class="col-md-2" style="position: page;">
+            <div class="row">
+                <h4>Visualize countries</h4>
+                <div class="dropdown">
+                    <button id="myButton2" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Choose an area
+                        <span class="caret"></span></button>
+                    <ul class="dropdown-menu" id="area-2">
+                        <li><a href="#">Africa</a></li>
+                        <li><a href="#">Asia</a></li>
+                        <li><a href="#">Americas</a></li>
+                        <li><a href="#">Europe</a></li>
+                        <li><a href="#">Oceania</a></li>
+                    </ul>
+                </div>
+                <select multiple class="form-control" id="country-select2"></select>
+                <br>
+                <label for="country-list">Country list</label>
+                <select multiple class="form-control" id="country-list">
+                </select>
+                <hr style="border: 2px solid dimgray;" />
+            </div>
+
+            <div class="row">
+                <h4>Comparison</h4>
+                <div class="dropdown">
+                    <button id="myButton1" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Choose an area
+                        <span class="caret"></span></button>
+                    <ul class="dropdown-menu" id="area-1">
+                        <li><a href="#">Africa</a></li>
+                        <li><a href="#">Asia</a></li>
+                        <li><a href="#">Americas</a></li>
+                        <li><a href="#">Europe</a></li>
+                        <li><a href="#">Oceania</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div id="country-list1" class="row">
+                <select id="country-select1" class="form-control"></select>
+
+                <hr style="border: 2px solid dimgray;" />
+            </div>
+
+        </div>
+
+    </div>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script>
+        let  width = 700, height = 400;
+        let margin = {left:60, right:40, top:20, bottom:50};
+
+        var color = d3.scaleOrdinal().range(d3.schemeCategory10);
+
+        let contentWidth = width - margin.left  - margin.right;
+        let contentHeight = height - margin.top - margin.bottom;
+
+        const parseYear = d3.timeParse("%Y");
+        const parseNumber = d3.format(",.0f");
+
+        let svg = d3.select("#chart-area").append("svg")
+            .attr("id","general")
+            .attr("width",width)
+            .attr("height",height);
+        let g = svg.append("g")
+            .attr("transform", "translate(" + margin.left + ", "
+                + margin.top + ")");
+
+        // Axises Scale
+        let xScale = d3.scaleTime().range([0,contentWidth]);
+        let yScale = d3.scaleLinear().range([contentHeight,0]);
+
+        // Axises generator
+        let xAxis = d3.axisBottom(xScale).tickSize(-contentHeight).ticks(8);
+        let yAxis = d3.axisLeft(yScale).tickSize(-contentWidth)
+            .ticks(8)
+            .tickFormat(d=>(d/1000)+"k");
+
+        // Axis group
+        let xAxisGroup = g.append("g")
+            .attr("class", "grid")
+            .attr("transform", "translate(0, " + contentHeight + ")");
+        let yAxisGroup = g.append("g")
+            .attr("class", "grid");
+
+        // X axis Label
+        g.append("text")
+            .attr("class", "x-axis label")
+            .attr("x", contentWidth / 2)
+            .attr("y", contentHeight + 40)
+            .style("font-size", "12px")
+            .attr("text-anchor", "middle")
+            .text("Year range from 1989 to 2017");
+
+        // Y axis Label
+        g.append("text")
+            .attr("class", "y-axis label")
+            .attr("x", -(contentHeight/2))
+            .attr("y", -35)
+            .style("font-size", "12px")
+            .attr("text-anchor", "middle")
+            .attr("transform", "rotate(-90)")
+            .text("The number of US immigration (unit: thousand people)");
+
+        // Define a line
+        let line = d3.line()
+            .curve(d3.curveCatmullRom.alpha(0.5))
+            .x(function(d) { return xScale(d.year); });
+
+        // Tooltip
+        let div = d3.select("body").append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 1);
+
+        // Define slider
+        $("#slider").slider({
+            max: 2017,
+            min: 1989,
+            step: 1,
+            values: [1989,2017],
+            slide: function (event,ui) {
+                $( "#year-range" ).val(ui.values[0] + " - " + ui.values[1] );
+            },
+            stop: function (event,ui) {
+                updateChart(1);
+                var countrySel = document.getElementById("country-select1");
+                try {
+                    let minor = countrySel.options[countrySel.selectedIndex].text;
+                    compare2();
+                }
+                catch(err) {
+                }
+            }
+        });
+        $("#year-range" ).val($("#slider").slider( "values", 0) +
+            " - " + $("#slider").slider("values", 1));
+
+        // Create custom bisector
+        const bisector = d3.bisector((d,x)=>{
+            return d.year - x;
+        }).right;
+
+        var t = d3.transition().duration(2000);
+
+        var countries = [];
+        var years = [];
+        var dataAll = [];
+        let selectedCountries = [];
+        let averageLData = [];
+        d3.csv("data/immigration by year.csv").then(data=>{
+            countries = data.columns.slice(1);
+            data.forEach(d=>{
+                years.push(parseInt(d.year));
+                d.year = parseYear(d.year);
+                countries.forEach(country=>{
+                    d[country] = +d[country];
+                })
+            });
+            //Sort year
+            data.sort(function(a,b) { return a.year - b.year; });
+            dataAll = data;
+
+            //Trial data
+            var major = countries[97], minor = countries[53];
+            // draw2Lines(major, minor);
+            draw2Lines(major, minor);
+            draw2Lines(minor, major);
+            // addTooltip(data, major);
+            // addTooltip(data, minor);
+
+            selectedCountries.push({country: "Afghanistan", region:"Asia"});
+            selectedCountries.push({country: "Vietnam", region:"Asia"});
+            updateChart(0);
+
+            svg.on("mousemove", function() {
+                // selectedData.push({country: "averagePath", region: ""});
+                let xPos = d3.event.pageX - svg.node().getBoundingClientRect().x - margin.left;
+                // const yPos = d3.event.pageY - svg.node().getBoundingClientRect().y - margin.top;
+                if(xPos < 0)
+                    xPos = 0;
+                if(xPos > contentWidth)
+                    xPos = contentWidth;
+                const theDate = xScale.invert(xPos);
+
+                let theIndex = bisector(dataAll,theDate);
+                if (theIndex >= dataAll.length)
+                    theIndex = dataAll.length -1;
+                for (var key in selectedCountries){
+                    let country = selectedCountries[key].country;
+                    // Add small point
+                    const path = d3.select("#"+country);
+                    var beginning = 0,
+                        end = path.node().getTotalLength(),
+                        target = null;
+                    while (true){
+                        target = Math.floor((beginning + end) / 2);
+                        pos = path.node().getPointAtLength(target);
+                        if ((target === end || target === beginning) && pos.x !== xPos) {
+                            break;
+                        }
+                        if (pos.x > xPos)      end = target;
+                        else if (pos.x < xPos) beginning = target;
+                        else break; //position found
+                    }
+
+                    const theSelection = g.selectAll(".mouseMoveText" + country).data([1]);
+                    theSelection.exit().remove();
+                    theSelection.enter().append("text").attr("class", "mouseMoveText"+country).text(parseNumber(yScale.invert(pos.y))).attr("x",pos.x).attr("y", pos.y);
+                    theSelection.text(parseNumber(yScale.invert(pos.y))).attr("x",pos.x+5).attr("y", pos.y - 5);
+
+                    // Add marker
+                    var marker = g.selectAll(".mouseMoveCircle" + country).data([1]);
+                    marker.exit().remove();
+                    marker.enter().append('circle')
+                        .attr("class", "mouseMoveCircle" + country)
+                        .attr('r', 4)
+                        .attr('fill', '#FFFFFF')
+                        .attr('pointer-events', 'none')
+                        .attr('stroke-width', '1px')
+                        .attr("cx",pos.x)
+                        .attr("cy",pos.y)
+                        .attr("stroke",()=>color(country));
+                    marker
+                        .attr("cx",pos.x)
+                        .attr("cy",pos.y)
+                        .attr("stroke",()=>color(country));
+
+                }
+                // Add Dash line (moving line)
+                g.selectAll(".lineMove").remove();
+                g.append("line")
+                    .attr("class","lineMove")
+                    .style("stroke","black")
+                    .style("stroke-dasharray", "4,3")
+                    .attr("x1",xPos)
+                    .attr("x2",xPos)
+                    .attr("y1", 0)
+                    .attr("y2",contentHeight);
+
+                // Add Average circle marker
+                const path = d3.select("#averagePath");
+                if (selectedCountries.length > 1) {
+                    var beginning = 0,
+                        end = path.node().getTotalLength(),
+                        target = null;
+                    while (true) {
+                        target = Math.floor((beginning + end) / 2);
+                        pos = path.node().getPointAtLength(target);
+                        if ((target === end || target === beginning) && pos.x !== xPos) {
+                            break;
+                        }
+                        if (pos.x > xPos) end = target;
+                        else if (pos.x < xPos) beginning = target;
+                        else break; //position found
+                    }
+
+                    const theSelection = g.selectAll(".averageLineText").data([1]);
+                    theSelection.exit().remove();
+                    theSelection.enter().append("text").attr("class", "averageLineText").text(parseNumber(yScale.invert(pos.y))).attr("x", pos.x).attr("y", pos.y);
+                    theSelection.text(parseNumber(yScale.invert(pos.y))).attr("x", pos.x + 5).attr("y", pos.y - 5);
+
+                    g.selectAll(".averageCircleMarker").remove();
+                    g.append('circle')
+                        .attr("class", "averageCircleMarker")
+                        .attr('r', 4)
+                        .attr('fill', '#FFFFFF')
+                        .attr('pointer-events', 'none')
+                        .attr('stroke-width', '1px')
+                        .attr("cx", pos.x)
+                        .attr("cy", pos.y)
+                        .attr("stroke", "black");
+                }
+            });
+        });
+
+        function showTip(htmlStr) {
+            div.style("left", (d3.event.pageX + 6) + "px")
+                .style("top", (d3.event.pageY - 12) + "px")
+                .html(htmlStr);
+        }
+
+        function hideTip() {
+            div.transition().duration(1000).style("opacity", 0);
+        }
+
+        function updateChart(number) {
+            let averageData = [];
+            let data = [];
+
+
+            const yearFrom = parseYear($("#slider").slider( "values", 0));
+            const yearTo = parseYear($("#slider").slider( "values", 1));
+            xScale.domain([yearFrom,yearTo]);
+
+            dataAll.forEach(d=>{
+                if(d.year <= yearTo && d.year >= yearFrom)
+                    data.push(d);
+            });
+            // Find max and min to define y axis domain
+            var maxVal = 0, minVal = 0, flag = true;
+            for (var key in selectedCountries) {
+                if (!selectedCountries.hasOwnProperty(key)) continue;
+                let country = selectedCountries[key].country;
+
+                if (flag) {
+                    minVal = d3.min(data, d => d[country]);
+                    flag = false;
+                    data.forEach(d=>{
+                        averageData.push({year: d.year, average: d[country]});
+                    });
+                }
+                else {
+                    data.forEach(d=>{
+                        for (let i in averageData) {
+                            if (averageData[i].year == d.year) {
+                                averageData[i].average += d[country];
+                                break;
+                            }
+                        }
+                    })
+                }
+                maxVal = Math.max(maxVal, d3.max(data, d => d[country]));
+                minVal = Math.min(minVal, d3.min(data, d => d[country]));
+            }
+            //Axis domains
+            yScale.domain([minVal,maxVal]);
+
+            for (var key in selectedCountries){
+                // if (!selectedCountries.hasOwnProperty(key)) continue;
+                let country = selectedCountries[key].country;
+                if(number >= 1){
+                    d3.select("#" + country).remove();
+                }
+
+                //Add a line
+                line.y(d=>yScale(d[country]));
+
+                if(!document.getElementById(country)) {
+
+
+                    // Draw NEW element
+                    var path = g
+                        .datum(data)
+                        .append("path")
+                        .attr("id", ()=>country)
+                        .attr("class", "line")
+                        .attr("fill", "none")
+                        .attr("stroke", d =>color(country))
+                        .attr("d", line)
+                        .on("mouseover", d => {
+                            d3.select("#" + country).style("opacity", 1).style("stroke-width", 3 + "px");
+                            var averagePerLine = d3.mean(data,d=>d[country]);
+
+                            g.append("line").attr("id", "average"+country)
+                                .style("stroke", color(country))
+                                .style("stroke-dasharray", "2,1")
+                                .attr("x1",0).attr("y1",yScale(averagePerLine))
+                                .attr("x2",(contentWidth)).attr("y2", yScale(averagePerLine));
+
+                            // Call Area
+                            drawComparingArea(data,country,null,averagePerLine,xScale,yScale,g);
+                        })
+                        .on("mouseleave", () => {
+                            d3.select("#" + country).style("opacity", .7).style("stroke-width", 1 + "px");
+                            d3.select("#average" + country).remove();
+                            d3.select("#areaAbove"+country).remove();
+                            d3.select("#areaBelow"+country).remove();
+                        });
+                    var totalLength = path.node().getTotalLength();
+                    path
+                        .attr("stroke-dasharray", totalLength + " " + totalLength)
+                        .attr("stroke-dashoffset", totalLength)
+                        .transition()
+                        .duration(2000)
+                        .attr("stroke-dashoffset", 0);
+                }
+                else {
+                    var path = d3.select("#"+country);
+                    path.attr("class", "line")
+                        .attr("fill", "none")
+                        .attr("id", country)
+                        .attr("stroke", () => color(country))
+                        .attr("d", line)
+                        .transition().duration(1000);
+                }
+
+                addLabelCountry(selectedCountries);
+
+            }
+
+            // Add Average Line if there are more than 2 lines
+            if (selectedCountries.length > 1) {
+                line.y((d) => yScale(d.average / selectedCountries.length));
+                d3.select("#averagePath").remove();
+                let averagePath = g.datum(averageData)
+                    .append("path")
+                    .attr("id", "averagePath")
+                    .attr("class", "line")
+                    .attr("fill", "none")
+                    .attr("stroke", "black")
+                    .attr("stroke-dasharray", "4,2,1")
+                    .attr("stroke-width", "3px")
+                    .attr("d", line);
+            }
+            else d3.select("#averagePath").remove();
+            //Generate axises
+            xAxisGroup.transition().duration(1000).call(xAxis);
+            yAxisGroup.transition().duration(1000).call(yAxis);
+
+        }
+
+        function drawComparingArea(data,country,minor,averagePerLine,xScale,yScale,g) {
+            // Define Area
+            var areaAbove = d3.area()
+                .x(d=>{ return xScale(d.year);})
+                .y0(d=>yScale(d[country]))
+                .y1(d=> {
+                    if(averagePerLine!=null){
+                        if (averagePerLine >= d[country])
+                            return yScale(averagePerLine);
+                    }
+                    else {
+                        if (d[minor] >= d[country])
+                            return yScale(d[minor]);
+                    }
+                    return yScale(d[country]);
+                })
+                .curve(d3.curveCatmullRom.alpha(0.5));
+
+            // Draw Area between 2 regions
+            var drawAbove = g.append("path")
+                .datum(data)
+                .attr("id", "areaAbove"+country)
+                .attr("fill","#fcc29b")
+                .attr("d", areaAbove);
+
+
+            var areaBelow = d3.area()
+                .x( d=> xScale(d.year) )
+                .y1(function(d) {
+                    if(averagePerLine!=null) {
+                        if (d[country] > averagePerLine)
+                            return yScale(averagePerLine);
+                    }
+                    else{
+                        if (d[country] > d[minor])
+                            return yScale(d[minor]);
+                    }
+                    return yScale(d[country]);
+                })
+                .y0(d=> yScale(d[country]))
+                .curve(d3.curveCatmullRom.alpha(0.5));
+
+            // Draw Area between 2 regions
+            var drawBelow = g.append("path")
+                .datum(data)
+                .attr("id", "areaBelow"+country)
+                .attr("fill","#c3ffd7")
+                .attr("d", areaBelow);
+        }
+
+        function addLabelCountry(data) {
+            if (data.length > 1) {
+                svg.selectAll(".average-label").remove();
+                svg.append("rect")
+                    .attr("class", "average-label rect")
+                    .attr("x", contentWidth - 15)
+                    .attr("y", 25)
+                    .attr("width", 10)
+                    .attr("height", 10)
+                    .style("opacity", "1")
+                    .style("fill", "black");
+                svg.append('text')
+                    .attr("class", "average-label text")
+                    .attr('x', contentWidth)
+                    .attr('y', 35)
+                    .text("Average line");
+            }
+            else svg.selectAll(".average-label").style("opacity","0");
+
+            var rect = svg.selectAll(".rect-label").data(data);
+            var text = svg.selectAll(".text-label").data(data);
+
+            rect.exit().remove();
+            text.exit().remove();
+
+            rect.enter().append("rect")
+                .transition().duration(1000)
+                .attr("class", "rect-label")
+                .attr("x", contentWidth - 15)
+                .attr("y", (d,i)=>(i+1) * 15+25)
+                .attr("width", 10)
+                .attr("height", 10)
+                .style("fill", d=>color(d.country));
+
+            rect.attr("x", contentWidth - 15)
+                .attr("y", (d,i)=>(i+1) * 15+25)
+                .transition().duration(1000)
+                .style("fill", d=>color(d.country));
+
+            text.enter().append('text')
+                .attr("class", "text-label")
+                .attr('x', contentWidth)
+                .attr('y',(d,i)=>(i+1) * 15+35)
+                .transition().duration(1000)
+                .text(d=>d.country);
+
+
+            text.append('text')
+                .attr('x', contentWidth )
+                .attr('y',(d,i)=>(i+1) * 15+35)
+                .transition().duration(1000)
+                .text(d=>d.country);
+        }
+
+        function draw2Lines(major, minor) {
+            let charts = d3.select("#chart-area").append("svg")
+                .attr("id",()=>"comparison")
+                .attr("width",width)
+                .attr("height",height/2+40)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + ", "
+                + margin.top + ")");
+
+            // Take year from and to in box
+            let yearFrom = parseYear($("#slider").slider( "values", 0));
+            let yearTo = parseYear($("#slider").slider( "values", 1));
+
+            let data = [];
+            dataAll.forEach(d=>{
+                if(d.year >= yearFrom && d.year <= yearTo)
+                    data.push(d);
+            });
+
+            // Axises Scale
+            let x = d3.scaleTime().range([0,contentWidth]);
+            let y = d3.scaleLinear().range([contentHeight/2,0]);
+
+            // Axises generator
+            let xAxis = d3.axisBottom(x).ticks(8);
+            let yAxis = d3.axisLeft(y)
+                .ticks(8)
+                .tickFormat(d=>(d/1000)+"k");
+
+            // Axis group
+            let xAxisGroup = charts
+                .append("g")
+                .attr("class", "x axis")
+                .attr("transform", "translate(0, " + contentHeight/2 + ")");
+            let yAxisGroup = charts.append("g")
+                .attr("class", "y-axis");
+
+            // X axis Label
+            charts.append("text")
+                .attr("class", "chart label")
+                .attr("x", 600)
+                .attr("y", 25)
+                .style("font-size", "15px")
+                .attr("text-anchor", "middle")
+                .text(major);
+
+            // max number between 2
+            let maxVal = Math.max(d3.max(data,d=> d[minor]),d3.max(data,d=> d[major]));
+            // min number between 2
+            let minVal = Math.min(d3.min(data,d=> d[minor]),d3.min(data,d=> d[major]));
+
+            //Axis domains
+            x.domain([yearFrom,yearTo]);
+            y.domain([minVal,maxVal]);
+
+            // Define minorLine
+            let minorLine = d3.line()
+                .curve(d3.curveCatmullRom.alpha(0.5))
+                .x((d)=>{if (d.year >= yearFrom && d.year <= yearTo) return x(d.year); })
+                .y(function(d) { return y(d[minor]);});
+
+            // Define majorLine
+            var majorLine = d3.line()
+                .curve(d3.curveCatmullRom.alpha(0.5))
+                .x(d=>{if (d.year >= yearFrom && d.year <= yearTo) return x(d.year);})
+                .y(d=> y(d[major]));
+
+            let drawMinorLine = charts.append("path")
+                .datum(data)
+                .attr("class", "minorLine")
+                .attr("d", minorLine);
+
+            let drawMajorLine = charts.append("path")
+                .datum(data)
+                .attr("class", "majorLine")
+                .attr("d", majorLine);
+
+            //Generate axises
+            xAxisGroup.transition().duration(2000).call(xAxis);
+            yAxisGroup.transition().duration(2000).call(yAxis);
+
+            // Define Area
+            drawComparingArea(data,major,minor,null,x,y,charts);
+
+            // Add Tooltip
+            let div = d3.select("body").append("div")
+                .attr("class", "tooltip")
+                .style("opacity", 0);
+
+            let circles = charts.append("g").selectAll("circle").data(data);
+            circles.enter().append("circle")
+                .attr("id",d=>major+d.year.getFullYear())
+                .attr("cx",d=>{
+                    if (d.year >= yearFrom && d.year <= yearTo){
+                        return x(d.year);}})
+                .attr("cy",(d)=>y(d[major]))
+                .attr("r",3)
+                .attr("fill","#F7FCFF")
+                .attr("stroke","#1970fc")
+                .attr("stroke-width","1px")
+                .on("mouseover", (d)=>{
+                    // while(true) {
+                    //
+                    // }
+                    d3.select("#"+major+d.year.getFullYear()).attr("fill","black");
+                    div.transition()
+                        .duration(500)
+                        .style("opacity", 1);
+                    div.html("Year: " + d.year.getFullYear() + "</br>" +d3.format(",")(d[major]))
+                        .style("left", (d3.event.pageX-10) + "px")
+                        .style("top", (d3.event.pageY-35) + "px");
+                    // d3.select(this).attr("fill","orange");
+
+                    paused = true;
+                })
+                .on("mouseleave", function(d) {
+                    d3.select("#"+major+d.year.getFullYear()).attr("fill","#F7FCFF");
+                    div.transition()
+                        .duration(1000)
+                        .style("opacity", 0);
+                    paused = false;
+                });
+        }
+
+        // is used for function addCountries
+        function addElement(begin, end) {
+            var j = 0;
+            var temp = [];
+            for (var i = begin; i < end; i++) {
+                temp[j] = countries[i];
+                j++;
+            }
+            return temp;
+        }
+
+        // is used for function area clicked
+        function addCountries(areaChoice) {
+            switch (areaChoice) {
+                case "Africa":
+                    return addElement(1, 53);
+                case "Americas":
+                    return addElement(53, 97);
+                case "Asia":
+                    return addElement(97, 145);
+                case "Europe":
+                    return addElement(145, 185);
+                case "Oceania":
+                    return addElement(185, 196);
+                default:
+                    break;
+            };
+        }
+
+        // When Choose area above
+        $('#area-2 a').click(function(e) {
+            var areaChoice = $(e.target).text();
+            document.getElementById("myButton2").innerHTML = areaChoice;
+            var countries = addCountries(areaChoice);
+            var countryList = document.getElementById("country-select2");
+            countryList.innerHTML = '';
+
+            //Check if in the #country-list
+            let form = document.getElementById("country-list");
+            var options = [];
+            for (let i = 0; i < form.options.length; i++) {
+                options.push(form.options[i].text);
+            }
+
+            //add countries to the list View
+            for (var ct in countries) {
+                if (countries.hasOwnProperty(ct) && !options.includes(countries[ct])) {
+                    var value = countries[ct];
+                    var newOption = document.createElement("option");
+                    newOption.text = value;
+                    newOption.id = "selected" + value;
+                    countryList.add(newOption);
+                }
+            }
+        });
+
+        // When Choose area below
+        $('#area-1 a').click(function(e) {
+            var areaChoice = $(e.target).text();
+            document.getElementById("myButton1").innerHTML = areaChoice;
+            var countries = addCountries(areaChoice);
+            var countryList = document.getElementById("country-select1");
+            countryList.innerHTML = '';
+            //add countries to the list
+            for(var ct in countries) {
+                if (countries.hasOwnProperty(ct)) {
+                    var value = countries[ct];
+                    var newOption = document.createElement("option");
+                    newOption.text = value;
+                    countryList.add(newOption);
+                }
+            }
+
+
+        });
+
+        // Double click to select country
+        document.getElementById('country-select2').ondblclick = function (e) {
+            let country = this.value;
+            var countryList = document.getElementById("country-list");
+            let newOption = document.createElement("option");
+            newOption.text = this.value;
+            countryList.add(newOption);
+
+            // Add element to selectedCountries array
+            let region = document.getElementById('myButton2').innerHTML;
+            selectedCountries.push({country: this.value, region:region});
+
+            // remove element from the choice list
+            var countrySelect = document.getElementById('country-select2');
+            countrySelect[countrySelect.selectedIndex].disabled = true;
+
+            // drawLine(country);
+            updateChart(0);
+        }
+
+        // Double click on selected countries
+        document.getElementById('country-list').ondblclick = function (e) {
+            var countryList = document.getElementById("country-list");
+            for (let key in selectedCountries) {
+                let country = selectedCountries[key].country;
+                if (country == this.value){
+                    var countrySelect = document.getElementById("selected" + country);
+                    if (countrySelect) {
+                        countrySelect.disabled = false;
+                    }
+                    selectedCountries.splice(key,1);
+                    break;
+                }
+            }
+
+            var path = d3.select("#"+this.value);
+            path.transition()
+                .duration(1000)
+                .attr("stroke-dashoffset", path.node().getTotalLength())
+                .remove();
+            countryList.remove(countryList.selectedIndex);
+            updateChart(0);
+        }
+
+        function compare2(){
+            var list = document.getElementById("country-list");
+            var countryList = [];
+            for(var i = 0; i < list.options.length; i++) {
+                countryList.push(list.options[i].text);
+            }
+            var countrySel = document.getElementById("country-select1");
+            try {
+                let minor = countrySel.options[countrySel.selectedIndex].text;
+                d3.selectAll("#comparison").remove();
+                countryList.forEach(d=>{
+                    draw2Lines(d,minor);
+                })
+            }
+            catch(err) {
+
+                alert("Please select a comparing country");
+            }
+        }
+
+        document.getElementById("country-select1").onclick = function (e){
+            compare2();
+        }
+
+
+    </script>
+</body>
+</html>
