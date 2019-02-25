@@ -620,7 +620,6 @@
 
             rect.attr("x", contentWidth - 15)
                 .attr("y", (d,i)=>(i+1) * 15+25)
-                .transition().duration(1000)
                 .style("fill", d=>color(d.country));
 
             text.enter().append('text')
@@ -634,7 +633,6 @@
             text.append('text')
                 .attr('x', contentWidth )
                 .attr('y',(d,i)=>(i+1) * 15+35)
-                .transition().duration(1000)
                 .text(d=>d.country);
         }
 
@@ -884,6 +882,7 @@
 
             countryList.remove(countryList.selectedIndex);
             updateChart(0);
+            compare2();
         }
 
         function compare2(){
@@ -901,8 +900,6 @@
                 })
             }
             catch(err) {
-
-                alert("Please select a comparing country");
             }
         }
 
