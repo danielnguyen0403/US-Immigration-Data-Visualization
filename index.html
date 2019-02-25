@@ -269,7 +269,7 @@
         var dataAll = [];
         let selectedCountries = [];
         let averageLData = [];
-        d3.csv("data/immigration by year.csv").then(data=>{
+        d3.csv("./data/immigration by year.csv").then(data=>{
             countries = data.columns.slice(1);
             data.forEach(d=>{
                 years.push(parseInt(d.year));
