@@ -269,7 +269,8 @@
         var dataAll = [];
         let selectedCountries = [];
         let averageLData = [];
-        d3.csv("data/immigration by year.csv").then(data=>{
+
+        d3.csv("./data/immigration by year.csv").then(data=>{
             countries = data.columns.slice(1);
             data.forEach(d=>{
                 years.push(parseInt(d.year));
@@ -285,14 +286,14 @@
             //Trial data
             var major = countries[97], minor = countries[53];
             // draw2Lines(major, minor);
-            draw2Lines(major, minor);
-            draw2Lines(minor, major);
+            // draw2Lines(major, minor);
+            // draw2Lines(minor, major);
             // addTooltip(data, major);
             // addTooltip(data, minor);
 
-            selectedCountries.push({country: "Afghanistan", region:"Asia"});
-            selectedCountries.push({country: "Vietnam", region:"Asia"});
-            updateChart(0);
+            // selectedCountries.push({country: "Afghanistan", region:"Asia"});
+            // selectedCountries.push({country: "Vietnam", region:"Asia"});
+            // updateChart(0);
 
             svg.on("mousemove", function() {
                 // selectedData.push({country: "averagePath", region: ""});
