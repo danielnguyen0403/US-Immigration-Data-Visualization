@@ -295,7 +295,9 @@
             // selectedCountries.push({country: "Vietnam", region:"Asia"});
             // updateChart(0);
 
-            svg.on("mousemove", function() {
+            svg.on("mouseout",function () {
+                g.selectAll(".lineMove").remove();
+            }).on("mousemove", function() {
                 // selectedData.push({country: "averagePath", region: ""});
                 let xPos = d3.event.pageX - svg.node().getBoundingClientRect().x - margin.left;
                 // const yPos = d3.event.pageY - svg.node().getBoundingClientRect().y - margin.top;
