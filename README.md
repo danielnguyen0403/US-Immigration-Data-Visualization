@@ -35,4 +35,6 @@ Additional, the visualization lets me compare 2 different countries in a separat
 In one of data I see, for example, Bhutan was allowed to immigrate from 2010 and reach
 the top in 2012 with 10 thousand people, then decreased the same amount each year after that.
 I predict that it will go closer to the average line and keep staying there for future years. 
-![Average Line](https://github.com/danielnguyen0403/US-Immigration-Data-Visualization/blob/master/images/average_line.png) 
+
+![Average Line](https://github.com/danielnguyen0403/US-Immigration-Data-Visualization/blob/master/images/average_line.png)
+ 
