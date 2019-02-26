@@ -22,10 +22,11 @@ Through the average country line, I can also predict
 for the future immigration for each country. 
 By this way, we can guess details for each month 
 of the country with a minimum deviation. 
-[![Multiple Line](./images/multiple_lines.png)]
+![Multiple Line](https://github.com/danielnguyen0403/US-Immigration-Data-Visualization/blob/master/images/multiple_lines.png)
+
 Additional, the visualization lets me compare 2 different countries in a separated chart with a real data. I also predict a data between 
 2 years in a countries by determining a point on a path.
-[![Compare](./images/comparison.png)]
+![Compare](https://github.com/danielnguyen0403/US-Immigration-Data-Visualization/blob/master/images/comparison.png)
 
 In one of data I see, for example, Bhutan was allowed to immigrate from 2010 and reach
 the top in 2012 with 10 thousand people, then decreased the same amount each year after that.
