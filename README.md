@@ -16,3 +16,9 @@ like another data set.
 The data is set into 28 rows (by year) and 196 columns (by countries).
 
 <h5>Emphasis</h5>
+In the data, when I need to focus on one data point, country, I can hover and
+see how different between a single year and average immigration. Additional, the visualization lets 
+me compare 2 different countries in a separated chart with a real data. I also predict a data between 
+2 years in a countries by determining a point on a path. By this way, we can have detail by month with 
+a minimum deviation. Through the average country line, I can also predict for the future immigration for 
+each country. 
