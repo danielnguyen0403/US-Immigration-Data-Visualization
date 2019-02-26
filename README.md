@@ -8,12 +8,12 @@ Link for page: https://danielnguyen0403.github.io/US-Immigration-Data-Visualizat
 
 
 <h5>Data description:</h5> 
-I got the data from website: https://www.migrationpolicy.org/programs/migration-data-hub 
-from 1999 to 2017 and combine with another website:https://www.dhs.gov/immigration-statistics
-to get another year from 1989 to 1999. In this data, I just have data point by year collection so it cannot go into detail
+I got the data from website:https://www.dhs.gov/immigration-statistics
+to get a period year from 1989 to 1999 and combine with another website: https://www.migrationpolicy.org/programs/migration-data-hub 
+to get another period from 1999 to 2017. In this data, I just have data point by year collection so it cannot go into detail
 like another data set.
 
-The data is set into 28 rows (by year) and 196 columns (by countries).
+The data is set into 28 rows <i>(by year)</i> and 196 columns <i>(by countries)</i>.
 
 <h5>Emphasis</h5>
 In the data, when I need to focus on one data point, country, I can hover and
