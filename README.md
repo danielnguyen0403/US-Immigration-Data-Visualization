@@ -22,6 +22,7 @@ Through the average country line, I can also predict
 for the future immigration for each country. 
 By this way, we can guess details for each month 
 of the country with a minimum deviation. 
+
 ![Multiple Line](https://github.com/danielnguyen0403/US-Immigration-Data-Visualization/blob/master/images/multiple_lines.png)
 
 Additional, the visualization lets me compare 2 different countries in a separated chart with a real data. I also predict a data between 
