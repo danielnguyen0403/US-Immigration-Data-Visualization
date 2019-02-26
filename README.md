@@ -19,10 +19,15 @@ The data is set into 28 rows (by year) and 196 columns (by countries).
 In the data, when I need to focus on one data point, country, I can hover and
 see how different between a single year and average immigration.
 Through the average country line, I can also predict 
-for the future immigration for each country.
-[![Average Line](./images/average_line.png)] By this way, we can guess details for each month 
+for the future immigration for each country. 
+By this way, we can guess details for each month 
 of the country with a minimum deviation. 
 [![Multiple Line](./images/multiple_lines.png)]
 Additional, the visualization lets me compare 2 different countries in a separated chart with a real data. I also predict a data between 
 2 years in a countries by determining a point on a path.
 [![Compare](./images/comparison.png)]
+
+In one of data I see, for example, Bhutan was allowed to immigrate from 2010 and reach
+the top in 2012 with 10 thousand people, then decreased the same amount each year after that.
+I predict that it will go closer to the average line and keep staying there for future years. 
+![Average Line](US-Immigration-Data-Visualization/images/average_line.png) 
